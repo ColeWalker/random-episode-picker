@@ -11,6 +11,7 @@ export class SearchComponent implements OnInit {
   localItems;
   searchForm;
   randEp;
+  selectedSeriesInfo;
 
   constructor(
     private apiInterfaceService: ApiInterfaceService,
@@ -27,6 +28,11 @@ export class SearchComponent implements OnInit {
 
   async getRandomEpisode(seriesId){
    this.apiInterfaceService.getDetailedSeriesInfo(seriesId).subscribe(data=>{
+      this.selectedSeriesInfo = {
+        id:seriesId,
+        seasons: data['seasons'],
+      }
+
       let randSeason: number = 1, randSeasonIndex = 0;
       let seasonEpisodeCount: number;
       let randomEpisodeNum: number = 1;
@@ -39,9 +45,9 @@ export class SearchComponent implements OnInit {
       if(seasonCount===0){
         randSeason= 1;
       }
+
       randSeasonIndex= randSeason-1;
-      console.log(randSeason);
-      console.log(data['seasons']);
+
       seasonEpisodeCount=  data['seasons'][randSeasonIndex]["episode_count"];
       randomEpisodeNum =  Math.floor(Math.random() * (seasonEpisodeCount))+1;
 
@@ -50,15 +56,40 @@ export class SearchComponent implements OnInit {
       });
     });
 
+  
+
       
   }
 
+  getAnotherRandomEpisode(){
+    let randSeason: number = 1, randSeasonIndex = 0;
+    let seasonEpisodeCount: number;
+    let randomEpisodeNum: number = 1;
+    let seasonCount: number;
+      
+    seasonCount = this.selectedSeriesInfo['seasons'].length - 1;
+    randSeason =  Math.floor(Math.random() * (seasonCount)) + 1;
 
+    //if there isn't a choice, set it to 1
+    if(seasonCount===0){
+      randSeason= 1;
+    }
+
+    randSeasonIndex= randSeason-1;
+
+    seasonEpisodeCount=  this.selectedSeriesInfo['seasons'][randSeasonIndex]["episode_count"];
+    randomEpisodeNum =  Math.floor(Math.random() * (seasonEpisodeCount))+1;
+
+    this.apiInterfaceService.getEpisodeInfo(this.selectedSeriesInfo['id'], randSeason, randomEpisodeNum).subscribe(data=>{
+      this.randEp=data;
+    });
+  }
 
   async onSubmit(query){
     
     this.searchForm.reset();
     this.randEp=null;
+    this.selectedSeriesInfo=null;
     this.apiInterfaceService.searchSeries(query['searchString']).subscribe(data => {
       this.localItems= data['results']
     });

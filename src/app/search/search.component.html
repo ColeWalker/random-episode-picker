@@ -1,19 +1,38 @@
 
-<form [formGroup]="searchForm" (ngSubmit)="onSubmit(searchForm.value)">
-    <label for="searchQuery">Search</label>
-    <input formControlName="searchString" id="searchQuery" type="text">
-    <button type="submit">Search</button>
-</form>
+<main class="search-wrapper">
+    <form class="search-form" [formGroup]="searchForm" (ngSubmit)="onSubmit(searchForm.value)">
+        <label for="searchQuery">Search</label>
+        <div class="input-wrapper">
+            <input formControlName="searchString" id="searchQuery" type="text">
+            <button type="submit">Search</button>
+        </div>
+    </form>
 
-    <ul *ngFor="let item of localItems" [ngClass]="{'hidden': randEp}">
-        <li>
-            <button (click)="getRandomEpisode(item.id)"> {{item.name}}</button>
-            <p>{{item.id}}</p>
-        </li>
-    </ul>
-
-
-<div *ngIf="randEp">
-    <p>{{randEp.name}}</p>
-    <p>{{randEp.season_number}}</p>
-</div>
+    <div class="results-wrapper">
+        <ul [ngClass]="{'hidden': randEp}">
+            <li *ngFor="let item of localItems">
+                
+                <div class="info-wrapper">
+                    <img *ngIf="item.poster_path" [src]="'http://image.tmdb.org/t/p/w185/' + item.poster_path" [alt]="item.name + ' Poster'">
+                    <div class="description">
+                        <button (click)="getRandomEpisode(item.id)"> {{item.name}}</button>
+                        <p *ngIf="item.overview">{{item.overview}}</p>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    
+    
+        <div class="episode-wrapper" *ngIf="randEp">
+            <img *ngIf="randEp.still_path" [src]="'http://image.tmdb.org/t/p/w400/'+randEp.still_path" [alt]="'Still from ' + randEp.name">
+            <div class="description">
+                <p class="episode-title">{{randEp.name}}</p>
+                <p>Season {{randEp.season_number}}, Episode {{randEp.episode_number}}</p>
+                <p>Original Air Date: {{randEp.air_date}}</p>
+                <p>{{randEp.overview}}</p>
+                
+                <button (click)="getAnotherRandomEpisode()">I don't like this episode!</button>
+            </div>
+        </div>
+    </div>
+</main>
