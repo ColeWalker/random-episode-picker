@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { movieDbToken } from '../../credentials';
+
 
 @Injectable({
   providedIn: 'root'
