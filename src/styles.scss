@@ -1,1 +1,23 @@
 /* You can add global styles to this file, and also import other style files */
+@import url('https://fonts.googleapis.com/css?family=Roboto&display=swap');
+
+
+body{
+    background-color: #121212;
+    color: #dbffe0;
+    font-family:"Roboto";
+}
+
+ul, li{
+    list-style:none;
+    &ul{
+        margin-left:0;
+    }
+}
+
+:root{
+    --app-width: 625px;
+    @media screen and (max-width: 626px){
+        --app-width: 100%;
+    }
+}

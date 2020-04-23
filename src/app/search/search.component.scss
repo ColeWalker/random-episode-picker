@@ -2,7 +2,11 @@
     display:none;
     
 }
-$appWidth: 400px;
+
+
+$colorSecondary: #36c449;
+$colorTertiary: #00660e;
+
 .search-wrapper{
     width: 100%;
     min-height:100vh;
@@ -11,22 +15,38 @@ $appWidth: 400px;
     flex-direction:column;
     justify-content:flex-start;
     align-items:center;
+  
+    header{
+        padding-bottom:20px;
+        width: var(--app-width);
+        h1{
+            margin-top:0;
+            padding-top:0;
+            margin-bottom:15px;
+            color: $colorSecondary;
+        }
+        p{
+            margin-top:0;
+        }
+    }
 
     .search-form{
-        width:$appWidth;
+        width:var(--app-width);
         label{
             display:block;
-            padding-bottom:10px;
-            font-size:16px;
+            padding-bottom:15px;
+            font-size:20px;
+            color: $colorSecondary;
         }
         .input-wrapper{
-            width:100%;
+            $inputBorderRadius: 3px;
+            width:calc(100% - 20px);
             $inputPadding: 10px;
             display:flex;
             flex-direction:row;
             align-items:center;
-            border: 2px solid #ddd;
-            border-radius: 3px;
+            margin: 0 auto;
+
             >*{
                 font-size: 16px;
             }
@@ -34,36 +54,50 @@ $appWidth: 400px;
                 border:none;
                 flex:1;
                 padding: $inputPadding;
+                border: 2px solid #ffffff;
+                border-radius: 3px 0 0 3px;
             }
             button{
                 padding: $inputPadding;
                 border:none;
-                background:none;
+                background: $colorTertiary;
+                color:white;
+                border: 2px solid $colorTertiary;
+                border-radius: 0 3px 3px 0;
+                cursor:pointer;
             }
         }
     }
 
     .results-wrapper{
-        width: $appWidth;
+        width: var(--app-width);
         padding-top:25px;
         ul{
             padding-left:0;
             li{
-              padding-bottom:25px;
+              background-color: #262626;
+              max-width: calc(var(--app-width) - 20px);
+              padding: 15px;
               margin-bottom:15px;
-              &:not(:last-child){
-                border-bottom: 1px solid #ddd;
-              }
-            
+                
               .info-wrapper{
                   display:flex;
                   direction:row;
                   justify-content:space-between;
                   align-items:flex-start;
-                  img{
-                    width: 25%;
-                   
-                }
+                  >button{
+                    padding:0;
+                    margin:0;
+                    background:none;
+                    display:block;
+                    border:none;
+                    width:25%;
+                    cursor:pointer;
+                    >img{
+                        width: 100%;
+                    }
+                    }
+                  
                     .description{
                        
                         font-size:16px;
@@ -73,7 +107,7 @@ $appWidth: 400px;
                             padding:0;
                             background:none;
                             border:none;
-                            color: #2e4057;
+                            color: $colorSecondary;
                             &:hover{
                                 cursor:pointer;
                             }
@@ -91,22 +125,50 @@ $appWidth: 400px;
             flex-direction:column;
             justify-content:space-between;
             align-items:flex-start;
-            img{
+            background-color: #262626;
+            padding: 15px;
+
+            .image-wrapper{
+                min-height: 330px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
                 width: 100%;
-                padding-bottom:30px;
+
+                img{
+                    width: 100%;
+                    padding-bottom:30px;
+                }
             }
             .description{
                 font-size:16px;
                 flex:1;
-            
+                .synopsis{
+                    min-height:100px;
+                    display:block;
+                }
+                .show-more-wrapper, .show-less-wrapper{
+                    >button{
+                        padding:0;
+                        font-size:18px;
+                        border:none;
+                        background:none;
+                        font-family: "Roboto";
+                        color: $colorSecondary;
+                        cursor:pointer;
+                    }
+                }
+                .show-less-wrapper{
+                    display:block;
+                }
                 .episode-title{
                     font-size:22px;
-                    color: #2e4057;
+                    color: $colorSecondary;
                     margin-top:0;
                     margin-bottom:0;
                 }
                 >button{
-                    background: #2e4057;
+                    background: $colorTertiary;
                     border: none;
                     border-radius: 15px;
                     color: #fff;
@@ -116,6 +178,7 @@ $appWidth: 400px;
                     margin: 0 auto;
                     margin-top: 15px;
                     display:block;
+                    cursor:pointer;
                 }
             }
         }

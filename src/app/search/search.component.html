@@ -1,7 +1,12 @@
 
 <main class="search-wrapper">
+    <header>
+        <h1>Random Episode Generator</h1>
+        <p>For when you know what you want to watch, but you don't know what you want to watch.</p>
+    </header>
+    
     <form class="search-form" [formGroup]="searchForm" (ngSubmit)="onSubmit(searchForm.value)">
-        <label for="searchQuery">Search</label>
+        <label for="searchQuery">What TV Series do you feel like watching?</label>
         <div class="input-wrapper">
             <input formControlName="searchString" id="searchQuery" type="text">
             <button type="submit">Search</button>
@@ -10,28 +15,35 @@
 
     <div class="results-wrapper">
         <ul [ngClass]="{'hidden': randEp}">
-            <li *ngFor="let item of localItems">
-                
-                <div class="info-wrapper">
-                    <img *ngIf="item.poster_path" [src]="'http://image.tmdb.org/t/p/w185/' + item.poster_path" [alt]="item.name + ' Poster'">
-                    <div class="description">
-                        <button (click)="getRandomEpisode(item.id)"> {{item.name}}</button>
-                        <p *ngIf="item.overview">{{item.overview}}</p>
+            <ng-container *ngFor="let item of localItems">
+                <li *ngIf="item.poster_path||item.overview && item.id">
+                    <div class="info-wrapper">
+                        <button (click)="getRandomEpisode(item.id)">
+                            <img *ngIf="item.poster_path" [src]="'http://image.tmdb.org/t/p/w185/' + item.poster_path" [alt]="item.name + ' Poster'">
+                        </button>
+                        <div class="description">
+                            <button type="button" (click)="getRandomEpisode(item.id)"> {{item.name}}</button>
+                            <p *ngIf="item.overview">{{item.overview}}</p>
+                        </div>
                     </div>
-                </div>
-            </li>
+                </li>
+            </ng-container>
         </ul>
     
     
         <div class="episode-wrapper" *ngIf="randEp">
-            <img *ngIf="randEp.still_path" [src]="'http://image.tmdb.org/t/p/w400/'+randEp.still_path" [alt]="'Still from ' + randEp.name">
+            <div class="image-wrapper">
+                <img *ngIf="randEp.still_path" [src]="'http://image.tmdb.org/t/p/w400/'+randEp.still_path" [alt]="'Still from ' + randEp.name">
+            </div>
             <div class="description">
                 <p class="episode-title">{{randEp.name}}</p>
                 <p>Season {{randEp.season_number}}, Episode {{randEp.episode_number}}</p>
                 <p>Original Air Date: {{randEp.air_date}}</p>
-                <p>{{randEp.overview}}</p>
+                <p class="synopsis">{{currentText}}<span class="show-more-wrapper" *ngIf="isCollapsed">... <button type="button" (click)="toggleView()">show more</button></span>
+                    <span class="show-less-wrapper" *ngIf="isCollapsible && !isCollapsed"><button type="button" (click)="toggleView()">show less</button></span>
+                </p>
                 
-                <button (click)="getAnotherRandomEpisode()">I don't like this episode!</button>
+                <button type="button" (click)="getAnotherRandomEpisode()">I don't like this episode!</button>
             </div>
         </div>
     </div>

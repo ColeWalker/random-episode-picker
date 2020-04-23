@@ -12,6 +12,9 @@ export class SearchComponent implements OnInit {
   searchForm;
   randEp;
   selectedSeriesInfo;
+  isCollapsed: boolean = false;
+  currentText: String;
+  isCollapsible: boolean = false;
 
   constructor(
     private apiInterfaceService: ApiInterfaceService,
@@ -23,7 +26,7 @@ export class SearchComponent implements OnInit {
   }
 
   ngOnInit(): void {
-   this.apiInterfaceService.getDummySearch().subscribe(data => console.log(data['results']));
+   
   }
 
   async getRandomEpisode(seriesId){
@@ -53,12 +56,11 @@ export class SearchComponent implements OnInit {
 
       this.apiInterfaceService.getEpisodeInfo(seriesId, randSeason, randomEpisodeNum).subscribe(data=>{
         this.randEp=data;
+        this.currentText=this.randEp.overview;
+        this.collapseText();
       });
     });
-
-  
-
-      
+ 
   }
 
   getAnotherRandomEpisode(){
@@ -82,7 +84,34 @@ export class SearchComponent implements OnInit {
 
     this.apiInterfaceService.getEpisodeInfo(this.selectedSeriesInfo['id'], randSeason, randomEpisodeNum).subscribe(data=>{
       this.randEp=data;
+      this.currentText=this.randEp.overview;
+      this.isCollapsed=false;
+      this.isCollapsible=false;
+      this.collapseText();
     });
+  }
+
+  toggleView(){
+    this.isCollapsed = !this.isCollapsed;
+    if(this.isCollapsed){
+      this.currentText= this.randEp.overview.substring(0,250).trim();
+    }
+    else{
+      this.currentText = this.randEp.overview;
+    }
+  }
+
+  collapseText(){
+    if(this.currentText.length>=250 && this.currentText[this.currentText.length-1]!=" " || this.currentText[this.currentText.length-1]!="."){
+      this.isCollapsed=true;
+      this.isCollapsible=true;
+    }
+    if(this.isCollapsed==true){
+      this.currentText= this.randEp.overview.substring(0, 250).trim();
+    }
+    else{
+      this.currentText= this.randEp.overview;
+    }
   }
 
   async onSubmit(query){
@@ -94,6 +123,7 @@ export class SearchComponent implements OnInit {
       this.localItems= data['results']
     });
   }
+
 
 
 
